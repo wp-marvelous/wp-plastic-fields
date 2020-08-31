@@ -1,0 +1,16 @@
+.idea
+.idea/*
+
+**/.sass-cache
+**/.sass-cache/*
+node_modules
+node_modules/*
+package-lock.json
+
+src/vendor/tareq1988/wordpress-settings-api-class/example
+src/vendor/tareq1988/wordpress-settings-api-class/example/*
+
+src/vendor/thanks-to-it/easy-referral-for-woocommerce/wporg_assets
+src/vendor/thanks-to-it/easy-referral-for-woocommerce/wporg_assets/*
+
+**/*.log

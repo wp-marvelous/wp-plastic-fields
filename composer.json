@@ -1,0 +1,34 @@
+{
+  "name": "wp-marvelous/wp-plastic-fields",
+  "type": "wordpress-plugin",
+  "description": "WP Plastic Fields",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pablo Pacheco",
+      "email": "pablo.sg.pacheco@gmail.com"
+    }
+  ],
+  "config": {
+    "preferred-install": "dist",
+    "optimize-autoloader": true
+  },
+  "require": {
+    "php": ">=7.0.0",    
+    "league/container":"3.3.1"
+  },
+  "replace": {
+
+  },
+  "autoload": {
+    "classmap": [
+      "src/core/"
+    ],
+    "files": ["src/includes/functions.php"],
+    "exclude-from-classmap": [
+      "/Tests/",
+      "/test/",
+      "/tests/"
+    ]
+  }
+}

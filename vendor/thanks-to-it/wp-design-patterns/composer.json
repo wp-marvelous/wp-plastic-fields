@@ -1,0 +1,27 @@
+{
+  "name": "thanks-to-it/wp-design-patterns",    
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pablo Pacheco",
+      "email": "pablo.sg.pacheco@gmail.com"
+    }
+  ],
+  "config": {
+    "preferred-install": "dist",
+    "optimize-autoloader": true
+  },
+  "require": {
+    "php": ">=5.6.0"    
+  },  
+  "autoload": {
+    "classmap": [
+      "src/php/"
+    ],
+    "exclude-from-classmap": [
+      "/Tests/",
+      "/test/",
+      "/tests/"
+    ]
+  }
+}

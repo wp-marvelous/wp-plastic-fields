@@ -1,0 +1,18 @@
+container
+==============
+- navigation
+- field_groups
+
+field_group
+==============
+- navigation_id
+- fields
+
+field
+==============
+- id
+- description
+- type
+
+navigation
+==============
