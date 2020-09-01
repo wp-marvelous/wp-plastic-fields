@@ -27,6 +27,7 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Field\Field' ) ) {
 		public $title;
 		public $disabled;
 		public $class;
+		public $read_only;
 		public $css;
 		public $placeholder;
 		public $type;
@@ -39,6 +40,7 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Field\Field' ) ) {
 		public $default = '';
 		public $display_style = '';
 		public $validation = array();
+		public $sanitization = array();
 
 		/**
 		 * @var Container
@@ -70,6 +72,42 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Field\Field' ) ) {
 			}
 		}
 
+		/**
+		 * get_default_values.
+		 *
+		 * @version 1.0.0
+		 * @since   1.0.0
+		 *
+		 * @return array
+		 */
+		function get_default_values() {
+			return array(
+				'id'                => '',
+				'title'             => '',
+				'disabled'          => false,
+				'default'           => false,
+				'class'             => '',
+				'read_only'         => false,
+				'css'               => '',
+				'placeholder'       => '',
+				'type'              => 'text',
+				'desc'              => '',
+				'desc_tip'          => false,
+				'description'       => '',
+				'custom_attributes' => array(),
+				'validation'        => array( 'default' => array( '' ), 'additional' => array() ),
+				'sanitization'      => array( 'default' => array( 'wp_unslash', 'sanitize_text_field' ), 'additional' => array() ),
+				'display_style'     => 'two_columns',
+				'suffix'            => '',
+				'value'             => ''
+			);
+		}
+
+		function sanitize_checkbox( $value ) {
+			$value = '1' === $value || 'yes' === $value ? 'yes' : 'no';
+			return $value;
+		}
+
 		function init() {
 			add_action( "plf_container_{$this->container->id}_field_{$this->id}_icons", array( $this, 'get_field_icons' ) );
 			add_action( "plf_container_{$this->container->id}_submit", array( $this, 'save_value' ) );
@@ -79,7 +117,7 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Field\Field' ) ) {
 
 		function get_error_messages() {
 			$messages = array(
-				'wp_http_validate_url' => 'Couldn\'t save {{field_value}} on {{field_title}} because it\'s not a valid URL.'
+				'wp_http_validate_url' => __( 'Couldn\'t save {{field_value}} on {{field_title}} because it\'s not a valid URL.', 'wp-plastic-fields' )
 			);
 			return apply_filters( 'plf_error_messages', $messages );
 		}
@@ -103,31 +141,20 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Field\Field' ) ) {
 					continue;
 				}
 				$message   = String_Functions::string_replace( array(
-					'field_value' => '<code>'.$error['input_value'].'</code>',
-					'field_title' => '<strong>'.$this->title.'</strong>',
+					'field_value' => '<code>' . $error['input_value'] . '</code>',
+					'field_title' => '<strong>' . $this->title . '</strong>',
 				), $message_template );
 				$notices[] = array(
 					'message' => $message,
 					'type'    => 'error'
 				);
 			}
-			//error_log( print_r( $this->validation_errors, true ) );
-			/*add_action( "plf_container_{$this->container->id}_field_{$this->id}_validation_errors", function( $function, $value) use($notices){
-				$notices[] = array(
-					'message' => 'asd <code>asd</code>',
-					'type'=>'error'
-				);
-			},10,2 );*/
 			return $notices;
-		}
-
-		function validation_errors( $function, $value ) {
-			//error_log(print_r($function,true));
 		}
 
 		function validate( $value ) {
 			$validation = array();
-			foreach ( $this->validation as $function ) {
+			foreach ( array_merge( $this->validation['default'], $this->validation['additional'] ) as $function ) {
 				if ( empty( $function ) ) {
 					continue;
 				}
@@ -143,8 +170,22 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Field\Field' ) ) {
 			}
 		}
 
+		function sanitize( $value ) {
+			foreach ( array_merge( $this->sanitization['default'], $this->sanitization['additional'] ) as $function ) {
+				if ( empty( $function ) ) {
+					continue;
+				}
+				$value = call_user_func( $function, $value );
+			}
+			return $value;
+		}
+
 		function save_value() {
+			if ( $this->read_only ) {
+				return;
+			}
 			$field_value = isset( $_POST[ $this->id ] ) ? $_POST[ $this->id ] : '';
+			$field_value = $this->sanitize( $field_value );
 			if ( ! $this->validate( $field_value ) ) {
 				return;
 			}
@@ -163,38 +204,10 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Field\Field' ) ) {
 				<!--<span class="plf-icon dashicons-before dashicons-awards"></span>-->
 				<!--<span class="plf-icon dashicons-before dashicons-heart"></span>-->
 				<!--<span class="plf-icon dashicons-before dashicons-lock"></span>-->
-				<span title="<?php echo $this->desc_tip?>" class="plf-icon dashicons-before dashicons-editor-help"></span>
+				<span title="<?php echo $this->desc_tip ?>"
+				      class="plf-icon dashicons-before dashicons-editor-help"></span>
 			</span>
 			<?php
-		}
-
-		/**
-		 * get_default_values.
-		 *
-		 * @version 1.0.0
-		 * @since   1.0.0
-		 *
-		 * @return array
-		 */
-		function get_default_values() {
-			return array(
-				'id'                => '',
-				'title'             => '',
-				'disabled'          => false,
-				'default'           => false,
-				'class'             => '',
-				'css'               => '',
-				'placeholder'       => '',
-				'type'              => 'text',
-				'desc'              => '',
-				'desc_tip'          => false,
-				'description'       => '',
-				'custom_attributes' => array(),
-				'validation'        => array( '' ),
-				'display_style'     => 'two_columns',
-				'suffix'            => '',
-				'value'             => ''
-			);
 		}
 
 		/**

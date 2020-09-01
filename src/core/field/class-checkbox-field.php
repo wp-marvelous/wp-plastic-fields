@@ -16,6 +16,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Field\Checkbox_Field' ) ) {
 
 	class Checkbox_Field extends Field {
+
+		public function get_default_values() {
+			$default_values                              = parent::get_default_values();
+			$default_values['sanitization']['default'][] = array( $this, 'sanitize_checkbox' );
+			return $default_values;
+		}
+
 		public function get_field_output() {
 			ob_start();
 			?>

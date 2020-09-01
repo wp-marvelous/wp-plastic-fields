@@ -19,6 +19,7 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Field\Title_Field' ) ) {
 		public function get_default_values() {
 			$default_values                  = parent::get_default_values();
 			$default_values['display_style'] = 'one_column';
+			$default_values['read_only']     = true;
 			return $default_values;
 		}
 

@@ -1,0 +1,94 @@
+/* Container */
+.plf-container-wrapper .form-table {
+  margin: 0;
+  width: auto; }
+  .plf-container-wrapper .form-table th {
+    min-width: 200px;
+    max-width: 260px;
+    width: auto; }
+    @media (max-width: 782px) {
+      .plf-container-wrapper .form-table th {
+        width: auto;
+        max-width: unset; } }
+  @media (max-width: 782px) {
+    .plf-container-wrapper .form-table {
+      width: 100%; } }
+
+.plf-container-wrapper th label {
+  display: block; }
+  @media (max-width: 782px) {
+    .plf-container-wrapper th label {
+      float: left; } }
+
+/* Container actions */
+.plf-container-actions {
+  clear: both; }
+
+/* Fields */
+.plf-container-wrapper td.forminp-title {
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.3em; }
+  .plf-container-wrapper td.forminp-title p {
+    margin: 1em 0; }
+
+.plf-container-wrapper table.form-table input:not([type="checkbox"]), .plf-container-wrapper table.form-table textarea {
+  min-width: 400px; }
+
+.form-table.plf-fields-group:not(:first-child) {
+  margin-top: 0; }
+
+/* Fields Icons */
+.plf-icons {
+  float: right;
+  position: relative;
+  right: -11px;
+  margin-left: 10px;
+  vertical-align: middle;
+  /*font-size:0;*/ }
+  @media (max-width: 782px) {
+    .plf-icons {
+      float: none;
+      right: -5px;
+      margin-left: 0px;
+      top: -1px; } }
+
+.plf-icon {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  color: #fff;
+  font-size: 0;
+  height: 17px;
+  cursor: help;
+  top: -1px; }
+  .plf-icon.dashicons-lock {
+    top: -2px; }
+  .plf-icon:before {
+    color: #666;
+    text-align: center;
+    font-size: 17px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative; }
+
+/* Navigation */
+.plf-nav.subsubsub {
+  float: none;
+  display: block;
+  clear: both; }
+  .plf-nav.subsubsub li:last-child:after {
+    content: none; }
+  .plf-nav.subsubsub li:after {
+    content: "|";
+    margin: 0 0 0 0; }
+
+.plf-notices-wrapper {
+  margin: 15px 0 0 0; }
+
+.wrap .notice.plf-notice {
+  margin: 10px 0 2px; }
+
+
+/*# sourceMappingURL=admin.css.map*/

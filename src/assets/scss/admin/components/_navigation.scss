@@ -1,0 +1,15 @@
+/* Navigation */
+.plf-nav {
+	&.subsubsub {
+		float:none;
+		display:block;
+		clear: both;
+		li:last-child:after {
+			content: none;
+		}
+		li:after {
+			content: "|";
+			margin: 0 0 0 0;
+		}
+	}
+}

@@ -1,0 +1,31 @@
+/* Container */
+.plf-container-wrapper{
+	.form-table{
+		margin: 0;
+		width: auto;
+		th {
+			min-width: 200px;
+			max-width: 260px;
+			width: auto;
+			@media (max-width: 782px) {
+				width: auto;
+				max-width: unset;
+			}
+		}
+		@media (max-width: 782px) {
+			width: 100%;
+		}
+	}
+	th label {
+		display: block;
+		@media (max-width: 782px) {
+			float: left;
+		}
+	}
+}
+
+
+/* Container actions */
+.plf-container-actions {
+	clear: both;
+}

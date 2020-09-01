@@ -77,21 +77,47 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Container' ) ) {
 			// Menu
 			add_action( 'admin_menu', array( $this, 'handle_admin_menus' ) );
 
-			// Container
-			//add_action( 'admin_init', array( $this, 'check_submit_btn' ) );
-
+			// Before Container
 			add_action( 'plf_before_container', array( $this, 'display_container_title' ), 10 );
 			add_action( 'plf_before_container', array( $this, 'init_container_navigation' ), 11 );
 			add_action( 'plf_before_container', array( $this, 'display_container_navigation' ), 12 );
+
+			// Container
 			add_action( 'plf_container', array( $this, 'init_fields_groups' ), 12 );
 			add_action( 'plf_container', array( $this, 'detect_submit_btn' ), 13 );
 			add_action( 'plf_container', array( $this, 'display_container_messages' ), 14 );
-			//add_action( 'plf_container_form', array( $this, 'init_fields_groups' ), 10 );
 
+			// Container Form
 			add_action( 'plf_container_form', array( $this, 'display_fields_groups' ), 12 );
 			add_action( 'plf_container_form', array( $this, 'display_container_form_actions' ), 15 );
 
+			// Show success message
+			add_action( "plf_container_{$this->id}_submit", array( $this, 'check_validation_errors_after_submit' ), 20 );
+			add_action( "plf_container_{$this->id}_no_validation_errors_after_submit", array( $this, 'show_success_message_after_submit' ) );
+		}
 
+		function show_success_message_after_submit() {
+			add_filter( "plf_container_{$this->id}_notices", function ( $notices ) {
+				$notices[] = array(
+					'message' => __( 'The settings have been saved successfully.', 'wp-plastic-fields' ),
+					'type'    => 'success'
+				);
+				return $notices;
+			} );
+		}
+
+		function check_validation_errors_after_submit() {
+			$errors = array();
+			foreach ( $this->fields_groups as $fields_group ) {
+				foreach ( $fields_group->fields as $field ) {
+					if ( ! empty( $field->validation_errors ) ) {
+						$errors[] = $field->validation_errors;
+					}
+				}
+			}
+			if ( empty( $errors ) ) {
+				do_action( "plf_container_{$this->id}_no_validation_errors_after_submit" );
+			}
 		}
 
 		function detect_submit_btn() {
@@ -129,10 +155,6 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Container' ) ) {
 			$this->fields_groups[] = new Fields_Group( $args, $this );
 		}
 
-		function save_fields() {
-
-		}
-
 		function init_container_navigation() {
 			do_action( "plf_container_{$this->id}_navigation", $this );
 			if ( empty( $this->navigation ) ) {
@@ -158,14 +180,17 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Container' ) ) {
 		}
 
 		function display_container_messages() {
+
 			$notices = apply_filters( "plf_container_{$this->id}_notices", array() );
-			echo '<br class="clear">';
+			//echo '<br class="clear">';
+
 			$notice_template = '<div class="{{class}}">{{message}}</div>';
+			$notices_str='';
 			foreach ( $notices as $notice ) {
 				$notice_args = wp_parse_args( $notice, array(
 					'is_dismissible' => false,
 					'auto_p'         => true,
-					'default_class'  => 'inline notice',
+					'default_class'  => 'plf-notice inline notice',
 					'type'           => 'info', // error | warning | success | info,
 					'class'          => '',
 					'message'        => '',
@@ -175,10 +200,13 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Container' ) ) {
 					$notice_args['class'] .= $notice_args['is_dismissible'] ? ' is-dismissible' : '';
 					$notice_args['class'] .= ' notice-' . $notice_args['type'];
 				}
-				echo String_Functions::string_replace( array(
+				$notices_str.= String_Functions::string_replace( array(
 					'message' => $notice_args['auto_p'] ? '<p>' . wp_kses_post( $notice_args['message'] ) . '</p>' : wp_kses_post( $notice_args['message'] ),
 					'class'   => $notice_args['class'],
 				), $notice_template );
+			}
+			if ( ! empty( $notices_str ) ) {
+				echo "<div class='plf-notices-wrapper'>{$notices_str}</div>";
 			}
 		}
 
@@ -201,135 +229,6 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Container' ) ) {
 			}
 			echo '</div>';
 			//echo '</table>';
-		}
-
-		/**
-		 * display_css.
-		 *
-		 * @version 1.0.0
-		 * @since   1.0.0
-		 */
-		function display_css() {
-			?>
-			<style>
-
-				/* Container */
-				.plf-container-wrapper .form-table th {
-					min-width: 200px;
-					/*max-width:221px;*/
-					max-width: 260px;
-					width: auto;
-				}
-
-				.plf-container-wrapper .form-table {
-					width: auto;
-				}
-
-				/* Container actions */
-				.plf-container-actions {
-					clear: both;
-				}
-
-				/* Fields */
-				.plf-container-wrapper td.forminp-title{
-					margin:0;
-					padding:0;
-				}
-				.plf-container-wrapper td.forminp-title{
-					font-size:13px;
-					line-height: 1.3em;
-				}
-
-				.plf-container-wrapper td.forminp-title p{
-					margin: 1em 0;
-				}
-
-				.form-table.plf-fields-group:not(:first-child) {
-					margin-top: 0;
-				}
-
-				.plf-container-wrapper th label {
-					display: block;
-				}
-
-				.plf-container-wrapper table.form-table input:not([type="checkbox"]), .plf-container-wrapper table.form-table textarea {
-					min-width: 400px
-				}
-
-				/* Navigation */
-				.plf-nav.subsubsub {
-					clear: both;
-				}
-
-				.plf-nav.subsubsub li:last-child:after {
-					content: none;
-				}
-
-				.plf-nav.subsubsub li:after {
-					content: "|";
-					margin: 0 0 0 0;
-				}
-
-				/* Fields Icons */
-				.plf-icons {
-					float: right;
-					position: relative;
-					right: -11px;
-					margin-left: 10px;
-					vertical-align: middle;
-					/*font-size:0;*/
-				}
-
-				.plf-icon {
-					position: relative;
-					display: inline-block;
-					vertical-align: middle;
-					color: #fff;
-					font-size: 0;
-					height: 17px;
-					cursor: pointer;
-					top: -1px;
-				}
-
-				/*.plf-icon.dashicons-editor-help{
-					top:1px;
-				}*/
-				.plf-icon.dashicons-lock {
-					top: -2px;
-				}
-
-				.plf-icon:before {
-					color: #666;
-					text-align: center;
-					font-size: 17px;
-					display: inline-block;
-					vertical-align: middle;
-					position: relative;
-				}
-
-				@media only screen and (max-width: 782px) {
-					.plf-container-wrapper .form-table {
-						width: 100%;
-					}
-
-					.plf-icons {
-						float: none;
-						right: -9px;
-						margin-left: 0px;
-						top: -1px;
-					}
-
-					.plf-container-wrapper th label {
-						float: left;
-					}
-
-					.plf-container-wrapper .form-table th {
-						width: auto;
-						max-width: unset;
-					}
-				}
-			</style>
-			<?php
 		}
 
 		function display_container_form_actions() {
@@ -357,7 +256,7 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Container' ) ) {
 					</form>
 				</div>
 			</div>
-			<?php $this->display_css(); ?>
+			<?php //$this->display_css(); ?>
 			<?php
 			return ob_get_clean();
 		}

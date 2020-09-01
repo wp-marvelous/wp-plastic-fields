@@ -38,6 +38,7 @@ return array(
     'ThanksToIT\\DPWP\\Namespace_Factory' => $vendorDir . '/thanks-to-it/wp-design-patterns/src/php/class-namespace-factory.php',
     'ThanksToIT\\DPWP\\Singleton' => $vendorDir . '/thanks-to-it/wp-design-patterns/src/php/class-singleton.php',
     'WP_Marvelous\\WP_Plastic_Fields\\Container\\Container' => $baseDir . '/src/core/container/class-container.php',
+    'WP_Marvelous\\WP_Plastic_Fields\\Container\\Options_Page_Container' => $baseDir . '/src/core/container/class-options-page-container.php',
     'WP_Marvelous\\WP_Plastic_Fields\\Core' => $baseDir . '/src/core/class-core.php',
     'WP_Marvelous\\WP_Plastic_Fields\\Factory\\Container_Factory' => $baseDir . '/src/core/factory/class-container-factory.php',
     'WP_Marvelous\\WP_Plastic_Fields\\Factory\\Factory' => $baseDir . '/src/core/factory/class-factory.php',
