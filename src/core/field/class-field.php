@@ -309,14 +309,14 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Field\Field' ) ) {
 		 * @since   1.0.0
 		 *
 		 */
-		function display() {
+		/*function display() {
 			$row_template = $this->fields_group->get_field_row_template();
 			echo String_Functions::string_replace( array(
 				'field_presentation'  => $this->get_presentation_output(),
 				'field_value'         => $this->get_field_output(),
 				'field_value_classes' => 'forminp forminp-' . esc_attr( sanitize_title( $this->type ) )
 			), $row_template );
-		}
+		}*/
 
 		/**
 		 * @return mixed

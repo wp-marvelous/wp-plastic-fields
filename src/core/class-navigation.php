@@ -33,8 +33,10 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Navigation' ) ) {
 		public function __construct( $args = array() ) {
 			$args       = wp_parse_args( $args, array(
 				'levels'       => array(),
+				'hide_levels'   => array(),
 				'original_url' => '',
 				'query_string' => array(
+					'level_params' => array(),
 					'level_prefix' => 'lvl_'
 				)
 			) );
@@ -128,6 +130,11 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Navigation' ) ) {
 			}
 		}
 
+		function get_level_param( $level ) {
+			$param = isset( $this->query_string['level_params'][ $level ] ) ? $this->query_string['level_params'][ $level ] : $this->query_string['level_prefix'] . $level;
+			return $param;
+		}
+
 		/**
 		 * calculate_dynamic_info.
 		 *
@@ -149,7 +156,8 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Navigation' ) ) {
 				}
 				$this->levels[ $navigation_level_key ]['active'] = true;
 				foreach ( $navigation_level_data['items'] as $item_key => $item ) {
-					$current_item = empty( $_GET[ $this->query_string['level_prefix'] . esc_attr( $level ) ] ) ? $navigation_level_data['default'] : sanitize_title( wp_unslash( $_GET[ $this->query_string['level_prefix'] . esc_attr( $level ) ] ) );
+					$level_param = $this->get_level_param( $level );
+					$current_item = empty( $_GET[ $level_param ] ) ? $navigation_level_data['default'] : sanitize_title( wp_unslash( $_GET[ $level_param ] ) );
 					if ( $item['id'] == $current_item ) {
 						//$this->navigation_data[ $navigation_level_key ]['active']                       = true;
 						$this->levels[ $navigation_level_key ]['items'][ $item_key ]['active'] = true;
@@ -193,12 +201,11 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Navigation' ) ) {
 			$query_args = array();
 			if ( isset( $navigation_level_data['path'] ) && ! empty( $navigation_level_data['path'] ) ) {
 				for ( $i = 0; $i < count( $navigation_level_data['path'] ); $i ++ ) {
-					$query_args[ $this->query_string['level_prefix'] . $i ] = $navigation_level_data['path'][ $i ];
+					$query_args[ $this->get_level_param( $i ) ] = $navigation_level_data['path'][ $i ];
 				}
 			}
-			$query_args[ $this->query_string['level_prefix'] . $level ] = esc_attr( $slug );
-			$link                                                       = add_query_arg( $query_args, $this->get_original_admin_page_url() );
-
+			$query_args[ $this->get_level_param( $level ) ] = esc_attr( $slug );
+			$link                                           = add_query_arg( $query_args, $this->get_original_admin_page_url() );
 			return $link;
 		}
 
@@ -280,10 +287,13 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Navigation' ) ) {
 			$navigation_data = $this->levels;
 			?>
 			<?php foreach ( $navigation_data as $navigation_level_data ) : ?>
+				<?php $level = intval( $navigation_level_data['level'] ); ?>
+				<?php if(in_array($level,$this->args['hide_levels'])): ?>
+					<?php continue; ?>
+				<?php endif; ?>
 				<?php if ( ! $navigation_level_data['active'] ): ?>
 					<?php continue; ?>
 				<?php endif; ?>
-				<?php $level = intval( $navigation_level_data['level'] ); ?>
 				<?php $wrapper_elem = $level == 0 ? 'nav' : 'ul'; ?>
 				<?php $wrapper_class = $level == 0 ? 'plf-nav nav-tab-wrapper' : 'plf-nav subsubsub'; ?>
 				<?php echo String_Functions::string_replace( array(

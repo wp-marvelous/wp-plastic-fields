@@ -77,6 +77,8 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Container' ) ) {
 			// Menu
 			add_action( 'admin_menu', array( $this, 'handle_admin_menus' ) );
 
+			//add_action( 'plf_container_' . 'plastic_slug' . '_navigation', function ( Container $container ) {
+
 			// Before Container
 			add_action( 'plf_before_container', array( $this, 'display_container_title' ), 10 );
 			add_action( 'plf_before_container', array( $this, 'init_container_navigation' ), 11 );
@@ -156,7 +158,7 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Container' ) ) {
 		}
 
 		function init_container_navigation() {
-			do_action( "plf_container_{$this->id}_navigation", $this );
+			do_action( "plf_container_{$this->id}_set_navigation", $this );
 			if ( empty( $this->navigation ) ) {
 				return;
 			}
@@ -211,7 +213,7 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Container' ) ) {
 		}
 
 		function init_fields_groups() {
-			do_action( "plf_container_{$this->id}_fields_groups", $this );
+			do_action( "plf_container_{$this->id}_set_fields_groups", $this );
 			foreach ( $this->fields_groups as $fields_group ) {
 				$fields_group->init();
 			}
@@ -222,7 +224,6 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Container' ) ) {
 				return;
 			}
 			echo '<div class="plf-container-wrapper">';
-			//echo '<div style="clear:both"></div>';
 			//echo '<table class="form-table plf-fields-group">';
 			foreach ( $this->fields_groups as $fields_group ) {
 				$fields_group->display();

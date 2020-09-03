@@ -66,6 +66,7 @@ class ComposerStaticInitb6b9d71f198d91ec58b3192afee66fe9
         'ThanksToIT\\DPWP\\Singleton' => __DIR__ . '/..' . '/thanks-to-it/wp-design-patterns/src/php/class-singleton.php',
         'WP_Marvelous\\WP_Plastic_Fields\\Container\\Container' => __DIR__ . '/../..' . '/src/core/container/class-container.php',
         'WP_Marvelous\\WP_Plastic_Fields\\Container\\Options_Page_Container' => __DIR__ . '/../..' . '/src/core/container/class-options-page-container.php',
+        'WP_Marvelous\\WP_Plastic_Fields\\Container\\Woo_Options_Page_Container' => __DIR__ . '/../..' . '/src/core/container/class-woo-options-page-container.php',
         'WP_Marvelous\\WP_Plastic_Fields\\Core' => __DIR__ . '/../..' . '/src/core/class-core.php',
         'WP_Marvelous\\WP_Plastic_Fields\\Factory\\Container_Factory' => __DIR__ . '/../..' . '/src/core/factory/class-container-factory.php',
         'WP_Marvelous\\WP_Plastic_Fields\\Factory\\Factory' => __DIR__ . '/../..' . '/src/core/factory/class-factory.php',

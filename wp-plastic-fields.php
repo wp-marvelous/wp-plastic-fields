@@ -26,6 +26,7 @@ PLF()->init( array(
 	'origin_filesystem_path' => __FILE__
 ) );
 
+// Containers
 add_filter( 'plf_containers', function ( $containers ) {
 	$containers['plastic_slug'] = array(
 		'type'       => 'options_page',
@@ -38,21 +39,9 @@ add_filter( 'plf_containers', function ( $containers ) {
 	return $containers;
 } );
 
-// Container
-/*$container = new Container( array(
-	'id'         => 'plastic_slug',
-	'type'       => 'options_page',
-	'page_title' => 'Plastic',
-	'menu'       => array(
-		'capability' => 'manage_options',
-		'menu_title' => 'Plastic',
-	),
-) );
-$container->init();*/
-
 // Navigation
-add_action( 'plf_container_' . 'plastic_slug' . '_navigation', function ( Container $container ) {
-	$container->set_navigation( new \WP_Marvelous\WP_Plastic_Fields\Navigation( array(
+add_filter( 'plf_container_' . 'plastic_slug' . '_navigation', function ( $navigation ) {
+	$navigation = array(
 		'levels' => array(
 			array(
 				'level' => 0,
@@ -86,15 +75,15 @@ add_action( 'plf_container_' . 'plastic_slug' . '_navigation', function ( Contai
 				)
 			),
 		)
-	) ) );
+	);
+	return $navigation;
 } );
 
 // Fields
-add_action( 'plf_container_' . 'plastic_slug' . '_fields_groups', function ( Container $container ) {
-	$container->add_fields_group( array(
+add_filter( 'plf_container_' . 'plastic_slug' . '_fields_groups', function ( $fields_groups ) {
+	$fields_groups[] = array(
 		'navigation' => array(
 			'path' => 'first_tab > first_sub', // or array( 'second_tab', 'clacla', 'first_sub_sub' ),
-			//'path' => 'second_tab > clacla > first_sub_sub', // or array( 'second_tab', 'clacla', 'first_sub_sub' ),
 		),
 		'fields'     => array(
 			array(
@@ -114,12 +103,12 @@ add_action( 'plf_container_' . 'plastic_slug' . '_fields_groups', function ( Con
 				'type'     => 'checkbox',
 			),
 			array(
-				'title'       => __( 'Field Title 3 Cool', 'wp-concept-fields' ),
-				'id'          => 'field_3',
-				'desc'        => __( 'Field description 3', 'wp-concept-fields' ),
-				'desc_tip'    => __( 'Field tip 2', 'wp-concept-fields' ),
-				'default'     => 'b',
-				'type'        => 'text',
+				'title'    => __( 'Field Title 3 Cool', 'wp-concept-fields' ),
+				'id'       => 'field_3',
+				'desc'     => __( 'Field description 3', 'wp-concept-fields' ),
+				'desc_tip' => __( 'Field tip 2', 'wp-concept-fields' ),
+				'default'  => 'b',
+				'type'     => 'text',
 			),
 			array(
 				'title'    => __( 'Field Title 4', 'wp-concept-fields' ),
@@ -130,12 +119,11 @@ add_action( 'plf_container_' . 'plastic_slug' . '_fields_groups', function ( Con
 				'type'     => 'text',
 			),
 		)
-	) );
+	);
 
-	$container->add_fields_group( array(
+	$fields_groups[] = array(
 		'navigation' => array(
 			'path' => 'first_tab > first_sub', // or array( 'second_tab', 'clacla', 'first_sub_sub' ),
-			//'path' => 'second_tab > clacla > first_sub_sub', // or array( 'second_tab', 'clacla', 'first_sub_sub' ),
 		),
 		'fields'     => array(
 			array(
@@ -155,92 +143,39 @@ add_action( 'plf_container_' . 'plastic_slug' . '_fields_groups', function ( Con
 				'type'     => 'checkbox',
 			),
 		)
-	) );
+	);
+	return $fields_groups;
 } );
 
-//CNCF();
 
-/*CNCF()->container()->add( 'lll', array(
-		'type' => 'options_page',
-		'menu' => array(
-			'capability' => 'manage_options',
-			'menu_title' => 'ABC'
-		),
-		'navigation' => array(
+// Containers
+/*add_filter( 'plf_containers', function ( $containers ) {
+	$containers['plastic_wc'] = array(
+		'type' => 'woo_options_page',
+	);
+	return $containers;
+} );
+
+// Navigation
+add_filter( 'plf_container_' . 'plastic_wc' . '_navigation', function ( $navigation ) {
+	$navigation = array(
+		'levels' => array(
 			array(
-				'level'   => 0,
-				'items'   => array(
-					array( 'id' => 'first_tab', 'title' => 'First Tab' ),
-					array( 'id' => 'second_tab', 'title' => 'Second Tab' ),
+				'level' => 0,
+				'items' => array(
+					array( 'id' => 'woo_test', 'title' => 'Woo Test' ),
 				)
 			),
 			array(
-				'level'   => 1,
-				'parent'  => array( 'first_tab' ),
-				'items'   => array(
-					array( 'id' => 'first_sub', 'title' => 'First Sub' ),
-					array( 'id' => 'second', 'title' => 'Second Sub' ),
-				)
-			),
-			array(
-				'level'   => 1,
-				'parent'  => array( 'second_tab' ),
-				'items'   => array(
-					array( 'id' => 'blabla', 'title' => 'BLABLA' ),
-					array( 'id' => 'clacla', 'title' => 'CLACLA' ),
-				)
-			),
-			array(
-				'level'   => 2,
-				'parent'  => array( 'second_tab', 'clacla' ),
-				'items'   => array(
-					array( 'id' => 'first_sub_sub', 'title' => 'First Sub Sub' ),
-					array( 'id' => 'second_sub_sub', 'title' => 'Second Sub Sub' ),
+				'level' => 1,
+				'path'  => array( 'woo_test' ),
+				'items' => array(
+					array( 'id' => 'a', 'title' => 'A' ),
+					array( 'id' => 'b', 'title' => 'B' ),
 				)
 			),
 		)
-	)
-);
-
-CNCF()->fields()->add_group( array(
-	'container'  => 'lll',
-	'navigation' => array(
-		'path' => array( 'second_tab', 'clacla', 'first_sub_sub' )
-	),
-	'fields'     => array(
-		array(
-			'title'    => __( 'Field Title', 'wp-concept-fields' ),
-			'id'       => 'first_field',
-			'desc'     => __( 'Field description', 'wp-concept-fields' ),
-			'desc_tip' => __( 'Field tip', 'wp-concept-fields' ),
-			'default'  => 'yes',
-			'type'     => 'checkbox',
-		),
-		array(
-			'title'    => __( 'Field Title 2', 'wp-concept-fields' ),
-			'id'       => 'second_field',
-			'desc'     => __( 'Field description 2', 'wp-concept-fields' ),
-			'desc_tip' => __( 'Field tip 2', 'wp-concept-fields' ),
-			'default'  => 'abc',
-			'type'     => 'text',
-		),
-	)
-) );
-
-CNCF()->fields()->add_group( array(
-	'container'  => 'lll',
-	'navigation' => array(
-		'path' => 'first_tab'
-	),
-	'fields'     => array(
-		array(
-			'title'    => __( 'Field Title', 'wp-concept-fields' ),
-			'id'       => 'first_field3',
-			'desc'     => __( 'Field description', 'wp-concept-fields' ),
-			'desc_tip' => __( 'Field tip', 'wp-concept-fields' ),
-			'default'  => 'yes',
-			'type'     => 'checkbox',
-		),
-	)
-) );
+	);
+	return $navigation;
+} );
 */
