@@ -149,7 +149,7 @@ add_filter( 'plf_container_' . 'plastic_slug' . '_fields_groups', function ( $fi
 
 
 // Containers
-/*add_filter( 'plf_containers', function ( $containers ) {
+add_filter( 'plf_containers', function ( $containers ) {
 	$containers['plastic_wc'] = array(
 		'type' => 'woo_options_page',
 	);
@@ -170,12 +170,79 @@ add_filter( 'plf_container_' . 'plastic_wc' . '_navigation', function ( $navigat
 				'level' => 1,
 				'path'  => array( 'woo_test' ),
 				'items' => array(
-					array( 'id' => 'a', 'title' => 'A' ),
-					array( 'id' => 'b', 'title' => 'B' ),
+					array( 'id' => 'first_section', 'title' => 'First Section' ),
+					array( 'id' => 'second_section', 'title' => 'Second Section' ),
 				)
 			),
 		)
 	);
 	return $navigation;
 } );
-*/
+
+// Fields
+add_filter( 'plf_container_' . 'plastic_wc' . '_fields_groups', function ( $fields_groups ) {
+	$fields_groups[] = array(
+		'navigation' => array(
+			'path' => 'woo_test > first_section', // or array( 'second_tab', 'clacla', 'first_sub_sub' ),
+		),
+		'fields'     => array(
+			array(
+				'title'    => __( 'A great title', 'wp-concept-fields' ),
+				'id'       => 'great_title',
+				'desc'     => __( 'Field description 2', 'wp-concept-fields' ),
+				'desc_tip' => __( 'Field tip 2', 'wp-concept-fields' ),
+				'default'  => 'a',
+				'type'     => 'title',
+			),
+			array(
+				'title'    => __( 'My checkbox', 'wp-concept-fields' ),
+				'id'       => 'first_field',
+				'desc'     => __( 'Field description', 'wp-concept-fields' ),
+				'desc_tip' => __( 'Field tip', 'wp-concept-fields' ),
+				'default'  => 'yes',
+				'type'     => 'checkbox',
+			),
+			array(
+				'title'    => __( 'Field Title 3 Cool', 'wp-concept-fields' ),
+				'id'       => 'field_3',
+				'desc'     => __( 'Field description 3', 'wp-concept-fields' ),
+				'desc_tip' => __( 'Field tip 2', 'wp-concept-fields' ),
+				'default'  => 'b',
+				'type'     => 'text',
+			),
+			array(
+				'title'    => __( 'Field Title 4', 'wp-concept-fields' ),
+				'id'       => 'field_4',
+				'desc'     => __( 'Field description 4', 'wp-concept-fields' ),
+				'desc_tip' => __( 'Field tip 4', 'wp-concept-fields' ),
+				'default'  => 'c',
+				'type'     => 'text',
+			),
+		)
+	);
+
+	$fields_groups[] = array(
+		'navigation' => array(
+			'path' => 'first_tab > first_sub', // or array( 'second_tab', 'clacla', 'first_sub_sub' ),
+		),
+		'fields'     => array(
+			array(
+				'title'    => __( 'A great title 2', 'wp-concept-fields' ),
+				'id'       => 'great_title_2',
+				'desc'     => __( 'Field description 2', 'wp-concept-fields' ),
+				'desc_tip' => __( 'Field tip 2', 'wp-concept-fields' ),
+				'default'  => 'a',
+				'type'     => 'title',
+			),
+			array(
+				'title'    => __( 'My checkbox', 'wp-concept-fields' ),
+				'id'       => 'another_field',
+				'desc'     => __( 'Field description', 'wp-concept-fields' ),
+				'desc_tip' => __( 'Field tip dd', 'wp-concept-fields' ),
+				'default'  => 'yes',
+				'type'     => 'checkbox',
+			),
+		)
+	);
+	return $fields_groups;
+} );

@@ -81,6 +81,9 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Container' ) ) {
 
 			// Before Container
 			add_action( 'plf_before_container', array( $this, 'display_container_title' ), 10 );
+
+			//Navigation
+			add_filter("plf_container_{$this->id}_navigation",array($this,'override_navigation_params'));
 			add_action( 'plf_before_container', array( $this, 'init_container_navigation' ), 11 );
 			add_action( 'plf_before_container', array( $this, 'display_container_navigation' ), 12 );
 
@@ -96,6 +99,11 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Container' ) ) {
 			// Show success message
 			add_action( "plf_container_{$this->id}_submit", array( $this, 'check_validation_errors_after_submit' ), 20 );
 			add_action( "plf_container_{$this->id}_no_validation_errors_after_submit", array( $this, 'show_success_message_after_submit' ) );
+		}
+
+		function override_navigation_params( $params ) {
+			$params['original_url'] = admin_url( 'admin.php?page=' . $this->id );
+			return $params;
 		}
 
 		function show_success_message_after_submit() {
@@ -162,7 +170,6 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Container' ) ) {
 			if ( empty( $this->navigation ) ) {
 				return;
 			}
-			$this->navigation->args['original_url'] = admin_url( 'admin.php?page=' . $this->id );
 			$this->navigation->init();
 		}
 
