@@ -15,9 +15,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Woo_Options_Page_Container' ) ) {
 	class Woo_Options_Page_Container extends Container {
+
+		public $tab_id = '';
+
 		public function init() {
 			add_filter( 'woocommerce_settings_tabs_array', array( $this, 'create_wc_settings_tab' ), 40 );
 			add_filter( "plf_container_{$this->id}_navigation", array( $this, 'override_navigation_params' ) );
+
+			//add_action( 'woocommerce_settings_saved',array($this,'detect_submit_btn') );
+			//error_log($this->tab_id);
 
 			//add_action( 'woocommerce_settings_tabs', array( $this, 'init_container_navigation' ), 11 );
 			//add_action( 'woocommerce_settings_tabs', array( $this, 'display_container_navigation' ), 12 );
@@ -74,6 +80,17 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Woo_Options_Page_
 			$this->navigation->init();
 		}*/
 
+		function detect_submit_btn() {
+			if(empty( $_POST['save'] )){
+				return;
+			}
+			check_admin_referer( 'woocommerce-settings' );
+			//error_log('ffdf');
+			//error_log(print_r($this->id,true));
+			//error_log('TESt:'."plf_container_{$this->id}_submit");
+			do_action( "plf_container_{$this->id}_submit" );
+		}
+
 		function create_wc_settings_tab( $settings_tabs ) {
 			do_action( "plf_container_{$this->id}_set_navigation", $this );
 			if ( empty( $this->navigation ) ) {
@@ -88,15 +105,22 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Woo_Options_Page_
 					break;
 				}
 			}
+			$this->tab_id = $new_tab_id;
 			add_action( 'woocommerce_sections_' . $new_tab_id, array( $this, 'init_container_navigation' ), 11 );
 			add_action( 'woocommerce_sections_' . $new_tab_id, array( $this, 'display_container_navigation' ), 12 );
 
-			add_action( 'woocommerce_settings_' . $new_tab_id, array( $this, 'init_fields_groups' ), 11 );
+			add_action( 'woocommerce_sections_' . $new_tab_id, array( $this, 'init_fields_groups' ), 11 );
+			add_action( 'woocommerce_sections_' . $new_tab_id, array( $this, 'detect_submit_btn' ), 12 );
+			add_action( 'woocommerce_sections_' . $new_tab_id, array( $this, 'display_container_messages' ), 13 );
+
 			//add_action( 'woocommerce_sections_' . $new_tab_id, array( $this, 'detect_submit_btn' ), 13 );
 			//add_action( 'woocommerce_sections_' . $new_tab_id, array( $this, 'display_container_messages' ), 14 );
 
 			// Container Form
-			add_action( 'woocommerce_settings_' . $new_tab_id, array( $this, 'display_fields_groups' ), 12 );
+			add_action( 'woocommerce_settings_' . $new_tab_id, array( $this, 'display_fields_groups' ), 13 );
+
+			// Submit
+			//add_action( 'woocommerce_settings_save_' . $new_tab_id, array( $this, 'detect_submit_btn' ) );
 			//add_action( 'woocommerce_sections_' . $new_tab_id, array( $this, 'display_container_form_actions' ), 15 );
 
 			// Show success message

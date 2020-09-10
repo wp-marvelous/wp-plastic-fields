@@ -147,17 +147,16 @@ add_filter( 'plf_container_' . 'plastic_slug' . '_fields_groups', function ( $fi
 	return $fields_groups;
 } );
 
-
 // Containers
 add_filter( 'plf_containers', function ( $containers ) {
-	$containers['plastic_wc'] = array(
+	$containers['plf_woo'] = array(
 		'type' => 'woo_options_page',
 	);
 	return $containers;
 } );
 
 // Navigation
-add_filter( 'plf_container_' . 'plastic_wc' . '_navigation', function ( $navigation ) {
+add_filter( 'plf_container_' . 'plf_woo' . '_navigation', function ( $navigation ) {
 	$navigation = array(
 		'levels' => array(
 			array(
@@ -180,7 +179,7 @@ add_filter( 'plf_container_' . 'plastic_wc' . '_navigation', function ( $navigat
 } );
 
 // Fields
-add_filter( 'plf_container_' . 'plastic_wc' . '_fields_groups', function ( $fields_groups ) {
+add_filter( 'plf_container_' . 'plf_woo' . '_fields_groups', function ( $fields_groups ) {
 	$fields_groups[] = array(
 		'navigation' => array(
 			'path' => 'woo_test > first_section', // or array( 'second_tab', 'clacla', 'first_sub_sub' ),
@@ -188,23 +187,22 @@ add_filter( 'plf_container_' . 'plastic_wc' . '_fields_groups', function ( $fiel
 		'fields'     => array(
 			array(
 				'title'    => __( 'A great title', 'wp-concept-fields' ),
-				'id'       => 'great_title',
+				'id'       => 'great_title_a',
 				'desc'     => __( 'Field description 2', 'wp-concept-fields' ),
 				'desc_tip' => __( 'Field tip 2', 'wp-concept-fields' ),
-				'default'  => 'a',
 				'type'     => 'title',
 			),
 			array(
 				'title'    => __( 'My checkbox', 'wp-concept-fields' ),
-				'id'       => 'first_field',
+				'id'       => 'first_field_b',
 				'desc'     => __( 'Field description', 'wp-concept-fields' ),
 				'desc_tip' => __( 'Field tip', 'wp-concept-fields' ),
-				'default'  => 'yes',
+				'default'  => 'no',
 				'type'     => 'checkbox',
 			),
 			array(
 				'title'    => __( 'Field Title 3 Cool', 'wp-concept-fields' ),
-				'id'       => 'field_3',
+				'id'       => 'field_3_d',
 				'desc'     => __( 'Field description 3', 'wp-concept-fields' ),
 				'desc_tip' => __( 'Field tip 2', 'wp-concept-fields' ),
 				'default'  => 'b',
@@ -212,7 +210,7 @@ add_filter( 'plf_container_' . 'plastic_wc' . '_fields_groups', function ( $fiel
 			),
 			array(
 				'title'    => __( 'Field Title 4', 'wp-concept-fields' ),
-				'id'       => 'field_4',
+				'id'       => 'field_4_e',
 				'desc'     => __( 'Field description 4', 'wp-concept-fields' ),
 				'desc_tip' => __( 'Field tip 4', 'wp-concept-fields' ),
 				'default'  => 'c',
@@ -223,7 +221,7 @@ add_filter( 'plf_container_' . 'plastic_wc' . '_fields_groups', function ( $fiel
 
 	$fields_groups[] = array(
 		'navigation' => array(
-			'path' => 'first_tab > first_sub', // or array( 'second_tab', 'clacla', 'first_sub_sub' ),
+			'path' => 'woo_test > second_section', // or array( 'second_tab', 'clacla', 'first_sub_sub' ),
 		),
 		'fields'     => array(
 			array(

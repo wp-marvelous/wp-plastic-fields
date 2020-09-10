@@ -189,7 +189,6 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Container\Container' ) ) {
 		}
 
 		function display_container_messages() {
-
 			$notices = apply_filters( "plf_container_{$this->id}_notices", array() );
 			//echo '<br class="clear">';
 

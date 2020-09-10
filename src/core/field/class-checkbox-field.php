@@ -20,6 +20,7 @@ if ( ! class_exists( 'WP_Marvelous\WP_Plastic_Fields\Field\Checkbox_Field' ) ) {
 		public function get_default_values() {
 			$default_values                              = parent::get_default_values();
 			$default_values['sanitization']['default'][] = array( $this, 'sanitize_checkbox' );
+			$default_values['default']='no';
 			return $default_values;
 		}
 
